@@ -54,7 +54,17 @@
       </span>
     </template>
     </el-dialog>
+
   </el-main>
+  <el-footer>      
+    <template v-if="formSuccess">
+      <el-alert
+        title="Formulario enviado con éxito"
+        type="success"
+        description="Nuevo usuario registrado"
+        show-icon
+      />
+    </template></el-footer>
 </el-container>
 
 
@@ -70,9 +80,9 @@ export default {
   },
   setup() {
     const centerDialogVisible = ref(false)
-    const formLabelWidth = '80px'
-    
-
+    const formSuccess = ref(false)
+   
+   //Función composable con CRUD básico de lo users
     const {state, fetchUsers, deleteUser, newUser} = usercrud()
 
     const form = reactive({
@@ -86,12 +96,14 @@ export default {
       console.log('Form subtimed')
       console.log(form)
       newUser(form)
+      formSuccess.value = true
+      centerDialogVisible.value = false
     }
     onMounted(()=>{
       fetchUsers()
     })
     
-    return { state, deleteUser, form, formLabelWidth, centerDialogVisible, validateForm }
+    return { state, deleteUser, form, formSuccess, centerDialogVisible, validateForm }
   }
 }
 </script>
